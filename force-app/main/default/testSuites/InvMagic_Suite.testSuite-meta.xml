@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexTestSuite xmlns="http://soap.sforce.com/2006/04/metadata">
+    <testClassName>IMagic.BulkPurchaseOrderBatchTest</testClassName>
+    <testClassName>IMagic.createBulkPOControllerTest</testClassName>
+    <testClassName>IMagic.createInvoice_LineItemHandlerTest</testClassName>
+    <testClassName>IMagic.D_TestDataFactory</testClassName>
+    <testClassName>IMagic.InventoryTriggerHandlerTest</testClassName>
+    <testClassName>IMagic.InventoryTriggerTest</testClassName>
+    <testClassName>IMagic.LwcLookupControllerTest</testClassName>
+    <testClassName>IMagic.magicTransferControllerTest</testClassName>
+    <testClassName>IMagic.OrderProductReservedLWCTest</testClassName>
+    <testClassName>IMagic.OrderProductTriggerHandlerTest</testClassName>
+    <testClassName>IMagic.orderProductTriggerTest</testClassName>
+    <testClassName>IMagic.OrderProductUnReservedTest</testClassName>
+    <testClassName>IMagic.POLineTriggerHandlerTest</testClassName>
+    <testClassName>IMagic.POLineTriggerTest</testClassName>
+    <testClassName>IMagic.PurchaseOrderLinesControllerTest</testClassName>
+    <testClassName>IMagic.StockAdjustmentControllerTest</testClassName>
+    <testClassName>IMagic.StockTransferControllerTest</testClassName>
+    <testClassName>IMagic.WarehouseControllerTest</testClassName>
+</ApexTestSuite>

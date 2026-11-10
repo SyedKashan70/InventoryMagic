@@ -1,0 +1,187 @@
+<template>
+  <article style={backgroundStyle}>
+    <!-- <div class="slds-card__header slds-grid"> -->
+      <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+        <!-- <div class="slds-media__body slds-grid"> -->
+          <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+            <div class="home_div">
+            <img src={iconPO_anim} class="img-anim">
+            <!-- <img src={iconPO_still} class="img-still"> -->
+          </div>
+        </div>
+        <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+          <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Receive Purchase Order</h2>
+        </div>
+        <!-- </div> -->
+      </header>
+      <!-- <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">Receive Purchase Order</h2>
+        </div>
+      </header> -->
+    <!-- </div> -->
+    <template if:false={purchaseOrderLines.length}>
+      <p style="text-align: center; font-weight: bold;">All products recieved</p>
+    </template>
+    <template if:true={purchaseOrderLines.length}>
+      <div style="overflow-x: auto;text-align: center;padding:.3em" class="slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+        <template if:false={isLoading}>
+          <!-- <div class="slds-m-around_medium"> -->
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"  style="border-left: 1px solid #d8dde6; border-right: 1px solid #d8dde6;">
+              <thead>
+                <tr class="slds-line-height_reset">
+                  <th style="width:2%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Select">Select</div>
+                  </th>
+                  <th style="width:5%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Product">Product</div>
+                  </th>
+                  <th style="width:25%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Description">
+                      Description
+                    </div>
+                  </th>
+                  <th style="width:5%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Ordered Quantity">
+                      Ordered Qty
+                    </div>
+                  </th>
+                  <th style="width:5%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Received Quantity">
+                      Received Qty
+                    </div>
+                  </th>
+                  <th style="width:15%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Receive Quantity">
+                      Receive Qty
+                    </div>
+                  </th>
+                  <th style="width:5%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Unit Price">Purchased Price</div>
+                  </th>
+                  <th style="width:5%; text-align: center;" scope="col">
+                    <div class="slds-truncate" title="Total Cost">Total Cost</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={purchaseOrderLines} for:item="row">
+                  <tr key={row.Id} class="slds-hint-parent">
+                    <td style="text-align: center;" data-label="Select">
+                      <lightning-input
+                        type="checkbox"
+                        data-id={row.Id}
+                        onchange={handleCheckboxChange}
+                        checked={row.isSelected}
+                      ></lightning-input>
+                    </td>
+                    <!-- <td class="slds-cell-wrap" style="width: 5%;text-align: center;" data-label="Product">
+                      <div class="slds-line-clamp">
+                        {row.productName}
+                      </div>
+                    </td> -->
+                    <td class="slds-cell-wrap" style="text-align: center; white-space: normal;" data-label="Product">
+                      <div>
+                        {row.productName}
+                      </div>
+                    </td>
+                    
+                    <td class="slds-cell-wrap" data-label="Description">
+                      <div>
+                        {row.productDescription}
+                      </div>
+                    </td>
+                    <td style="text-align: center;" data-label="Ordered Quantity">
+                      <div class="slds-truncate">
+                        {row.quantityOrdered}
+                      </div>
+                    </td>
+                    <td style="text-align: center;" data-label="Received Quantity">
+                      <div class="slds-truncate">
+                        {row.recievedQuantity}
+                      </div>
+                    </td>
+                    <td style="text-align: center;" data-label="Receive Quantity">
+                      <lightning-input
+                        type="number"
+                        class="validate"
+                        value={row.newQuantity}
+                        onchange={handleQuantityChange}
+                        data-id={row.Id}
+                        data-name="width"
+                        variant="label-hidden"
+                        min={row.minimumRecieveQty}
+                        required
+                        max={row.maxNewQuantity}
+                        disabled={row.disableInput}
+                      ></lightning-input>
+                      <template if:true={row.showSerialNumberModalIcon}>
+                        <span class="tooltip">
+                        <lightning-button style="margin-left: 5px;" class="rounded-btn" data-id={row.Id} label=" # " onclick={handleSerialNumberModalClick} disabled={row.disableInput}></lightning-button >
+                          <span class="tooltiptext">Add Serial</span>
+                        </span>
+                        </template>
+                   
+                    </td>
+                    <td style="text-align: center;" data-label="Unit Price">
+                      <lightning-input
+                        type="number"
+                        class="validate"
+                        value={row.unitPrice}
+                        onchange={handleUnitPriceChange}
+                        data-id={row.Id}
+                        variant="label-hidden"
+                        min="1"
+                        required
+                        disabled={row.disableInput}
+                        step="0.01"
+                      ></lightning-input>
+                      <span  onclick={setDefaultPurchasePrice} data-id={row.Id}>Cost: $ {row.inventoryCost}</span>
+                    </td>
+                    <td style="text-align: center;" data-label="Total Cost">
+                      <div class="slds-truncate">
+                        $ {row.totalCost}
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          <!-- </div> -->
+        </template>
+        <template if:true={isLoading}>
+          <div class="slds-m-around_medium">
+            <lightning-spinner
+              alternative-text="Loading"
+              size="medium"
+            ></lightning-spinner>
+          </div>
+        </template>
+      </div>
+    </template>
+    
+    <footer class="slds-card__footer">
+      <template if:true={purchaseOrderLines.length}>
+        <lightning-button
+          label="Save"
+          variant="brand"
+          class="save-btn slds-m-right_x-small"
+          onclick={handleSave}
+        ></lightning-button>
+      </template>
+      <lightning-button
+        label="Cancel"
+        variant="neutral"
+        onclick={handleCancel}
+      ></lightning-button>
+    </footer>
+  </article>
+
+  
+  <template if:true={showSerialNumberModal}>
+    <c-add-serial-number-modal
+    onclose={handleCloseModal}
+    onsaveserialnumbers={handleSaveSerialNumbers}
+    rowdetail={rowDetail}></c-add-serial-number-modal>
+</template>
+</template>

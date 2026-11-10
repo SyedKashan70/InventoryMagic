@@ -1,0 +1,22 @@
+.home_div, img {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  /* .img-anim {
+    display: none;
+  }
+
+  .home_div:hover .img-anim {
+    display: inline-block;
+  }
+  
+  .home_div:hover .img-still{
+    display: none;
+  } */
+  .lookup-input{
+    color: #fff;
+  }

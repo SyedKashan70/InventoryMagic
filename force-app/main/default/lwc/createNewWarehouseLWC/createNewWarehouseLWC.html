@@ -1,0 +1,17 @@
+<template>
+    <template if:true={warehouseFound}>
+        <lightning-card title="Warehouse already exists" icon-name="standard:warehouse">
+        </lightning-card>
+    </template>
+    <template if:false={warehouseFound}>
+        <div class="slds-card__body slds-table--bordered slds-box slds-theme_shade slds-table_bordered slds-table_col-bordered " >
+            <lightning-record-form
+                object-api-name="IMagic__Warehouse__c"
+                fields={warehouseFields}
+                mode="edit"
+                columns="2"
+            >
+            </lightning-record-form>
+        </div>
+    </template>
+</template>

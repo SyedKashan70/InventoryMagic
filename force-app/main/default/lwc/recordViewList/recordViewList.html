@@ -1,0 +1,81 @@
+<!--
+  @description       : 
+  @author            : Syed Kashan
+  @group             : 
+  @last modified on  : 05-05-2025
+  @last modified by  : Syed Kashan
+-->
+<template>
+    <div class="accounts-container">
+
+        <!-- Header with Back and Object Name -->
+        <div class="slds-grid slds-align_absolute-center slds-m-bottom_medium">
+            <div class="slds-col">
+                <lightning-button-icon 
+                    icon-name="utility:back" 
+                    variant="bare" 
+                    alternative-text="Back" 
+                    onclick={handleBack}
+                    class="back-button">
+                </lightning-button-icon>
+            </div>
+            <div class="slds-col slds-text-align_center">
+                <span class="slds-text-heading_small">{objName}</span>
+            </div>
+            <div class="slds-col">
+                <span class="slds-text-heading_small slds-float_right"></span>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <h2 class="subheader">Search</h2>
+            <input 
+                type="text" 
+                class="search-input slds-input" 
+                placeholder="Search..." 
+                value={searchTerm}
+                onchange={handleSearch}
+            />
+
+            <!-- Record List -->
+            <ul class="account-list slds-m-top_medium">
+                <template for:each={filterRecordList} for:item="record">
+                    <li key={record.Id} class="account-item slds-box slds-m-bottom_x-small" onclick={handleRecordClick} data-id={record.Id}>
+                        <div class="account-card">
+                            <div class="account-name slds-text-title_bold">{record.Name}</div>
+                            <div class="account-link slds-text-body_small">{objName}</div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <!-- Dynamic Modal -->
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Record Details</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <template if:true={selectedRecord}>
+                            <template for:each={recordEntries} for:item="entry">
+                                <p key={entry.key}>
+                                    <strong>{entry.key}:</strong> {entry.value}
+                                </p>
+                            </template>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeModal}>Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

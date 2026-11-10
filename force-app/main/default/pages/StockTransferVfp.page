@@ -1,0 +1,20 @@
+<apex:page standardController="Stock_Transfer__c">
+    <apex:includeLightning />
+    <div id="lightning"> </div>
+    <script>
+        document.addEventListener('lightning__showtoast', event => {
+            sforce.one.showToast(event.toastAttributes);
+        });
+        $Lightning.use(
+            "IMagic:StockTransferApp",
+            function () {
+                $Lightning.createComponent(
+                    "IMagic:stockTransfer",
+                    {},
+                    "lightning"
+                );
+            }
+        );
+
+    </script>
+</apex:page>

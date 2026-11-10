@@ -1,0 +1,155 @@
+<!--
+  @description       : 
+  @author            : Syed Kashan
+  @group             : 
+  @last modified on  : 06-05-2025
+  @last modified by  : Syed Kashan
+-->
+<template>
+    <p class="slds-text-heading_medium slds-p-around_medium">Reserve Order (Offline)</p>
+
+    <!-- Desktop View (Grouped Accordion) -->
+    <template if:false={isMobile}>
+        <lightning-accordion allow-multiple-sections-open class="slds-p-horizontal_medium">
+            <template for:each={groupedOrderItems} for:item="group">
+                <lightning-accordion-section label={group.label} key={group.orderNumber}>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Product</th>
+                                <th>Supplier</th>
+                                <th>Ordered Qty</th>
+                                <th>Remaining Qty</th>
+                                <th>Available Qty</th>
+                                <th>Order Num</th>
+                                <th>New Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={group.items} for:item="item">
+                                <tr key={item.Id}>
+                                    <td data-label="Select"><input type="checkbox" data-id={item.Id} checked={item.isSelected} onchange={handleCheckboxChange} /></td>
+                                    <td data-label="Product Name">{item.productName}</td>
+                                    <td data-label="Supplier Name">{item.supplierName}</td>
+                                    <td data-label="Quantity Ordered">{item.quantityOrdered}</td>
+                                    <td data-label="Remaining Quantity">{item.quantityRemaining}</td>
+                                    <td data-label="Available Quantity">{item.inventoryAvailableQuantity}</td>
+                                    <td data-label="Order number">{item.orderNumber}</td>
+                                    <td data-label="New Quantity">
+                                        <lightning-input type="number"
+                                            value={item.newQuantity} 
+                                            variant="label-hidden"
+                                            onchange={handleQtyChange} 
+                                            min={item.minNewQty}
+                                            max={item.inventoryAvailableQuantity}
+                                            data-id={item.Id}
+                                            disabled={item.disableInput}
+                                            class="validate">
+                                        </lightning-input>
+                                        <template if:true={item.showSerialBtn}>
+                                            <lightning-button 
+                                                class="slds-button_icon slds-m-left_x-small"
+                                                data-id={item.Id} 
+                                                label="#"
+                                                onclick={handleAddSerialClick}>
+                                            </lightning-button>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </template>
+
+    <!-- Mobile View (Grouped Accordion) -->
+    <template if:true={isMobile}>
+        <lightning-accordion allow-multiple-sections-open class="mobile-card mobile-only">
+            <template for:each={groupedOrderItems} for:item="group">
+                <lightning-accordion-section label={group.label} key={group.orderNumber}>
+                    <template for:each={group.items} for:item="item">
+                        <div key={item.Id} class="card-item slds-box slds-m-bottom_small">
+                            <div class="card-field">
+                                <span class="label">Select</span>
+                                <span class="value">
+                                    <input type="checkbox" data-id={item.Id} 
+                                    checked={item.isSelected} onchange={handleCheckboxChange} />
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">Product:</span>
+                                <span class="value">
+                                    <p>{item.productName}</p>
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">Supplier</span>
+                                <span class="value">
+                                    <p>{item.supplierName}</p>
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">Ordered Qty:</span>
+                                <span class="value">
+                                    <p>{item.quantityOrdered}</p>
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">Remaining Qty:</span>
+                                <span class="value">
+                                    <p>{item.quantityRemaining}</p>
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">Available Qty:</span>
+                                <span class="value">
+                                    <p>{item.inventoryAvailableQuantity}</p>
+                                </span>
+                            </div>
+                            <div class="card-field">
+                                <span class="label">New Qty:</span>
+                                <span class="value">
+                                    <lightning-input type="number"
+                                        value={item.newQuantity} 
+                                        variant="label-hidden"
+                                        onchange={handleQtyChange} 
+                                        min={item.minNewQty}
+                                        max={item.inventoryAvailableQuantity}
+                                        data-id={item.Id}
+                                        disabled={item.disableInput}
+                                        class="validate">
+                                    </lightning-input>
+                                    <template if:true={item.showSerialBtn}>
+                                        <lightning-button 
+                                            class="slds-button_icon slds-m-left_x-small"
+                                            data-id={item.Id} 
+                                            label="#"
+                                            onclick={handleAddSerialClick}>
+                                        </lightning-button>
+                                    </template>
+                                </span>
+                            </div>
+                        </div>
+                    </template>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </template>
+
+    <!-- Serial Modal -->
+    <template if:true={showSerialModal}>
+        <c-add-serial-modal-offline
+            onclose={handleCloseModal}
+            onsaveserials={handleSaveSerials}
+            serial-record={serialRecord}>
+        </c-add-serial-modal-offline>
+    </template>
+
+    <div class="actions">
+        <lightning-button label="Save" variant="brand"  class="slds-m-right_small" onclick={handleCreateOrder}></lightning-button>
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+    </div>
+</template>

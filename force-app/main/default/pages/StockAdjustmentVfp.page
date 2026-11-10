@@ -1,0 +1,17 @@
+<apex:page standardController="Stock_Adjustment__c">
+    <apex:includeLightning />
+    <style>
+        .slds-scope .slds-input[readonly] {
+            --slds-c-input-spacing-horizontal-start: unset;
+        }
+    </style>
+    <div id="lightning"> </div>
+    <script>
+        document.addEventListener('lightning__showtoast', event => {
+            sforce.one.showToast(event.toastAttributes);
+        });
+        $Lightning.use("IMagic:StockAdjustmentApplication", function() {
+            $Lightning.createComponent("IMagic:stockAdjustment", {}, "lightning");
+        });
+    </script>
+</apex:page>

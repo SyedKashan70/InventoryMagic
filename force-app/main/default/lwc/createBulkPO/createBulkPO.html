@@ -1,0 +1,155 @@
+<template>
+    <article style={backgroundStyle}>
+        <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+              <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconPSE_logo} class="img-anim">
+                <!-- <img src={iconPSE_logo} class="img-still"> -->
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+              <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Bulk Purchase Order</h2>
+            </div>
+          </header>
+
+          <div class="slds-p-around_medium">
+            <!-- Header -->
+            <div class="slds-grid slds-grid_align-spread slds-p-bottom_small">
+                <div class="slds-text-title_bold">Inventory Stock Status</div>
+                <div class="slds-text-title">Page {currentPage} of {totalPages}</div>
+            </div>
+
+            <!-- Filter Options -->
+            <div class="slds-m-bottom_medium slds-grid slds-grid_vertical-align-center">
+                <lightning-input 
+                    class="slds-m-right_small" 
+                    type="checkbox" 
+                    label="Hide Zero QOH" 
+                    checked={hideZeroQoh}
+                    onchange={handleHideZeroQohChange}>
+                </lightning-input>
+                <lightning-input 
+                    class="slds-m-right_small" 
+                    type="checkbox" 
+                    label="Use Available Qty to Reorder" 
+                    onchange={handleUseAvailQtyToReorderChange}>
+                </lightning-input>
+                <lightning-input 
+                    type="checkbox" 
+                    label="Show Selected Inventory" 
+                    onchange={handleShowSelectedInventoryChange}>
+                </lightning-input>
+            </div>
+
+            <!-- Lookup Fields -->
+            <div class="slds-m-bottom_medium">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_5-of-15">
+                        <c-lwc-lookup   
+                            lookup-label="" 
+                            lookup-placeholder="Search Product"
+                            object-api-name="Product2" 
+                            icon-name="standard:product"
+                            query-fields={product_QueryFields}
+                            query-filters={product_QueryFilters}
+                            order-by-fields-with-order={product_OrderBy}
+                            record-limit={product_RecordLimit}
+                            selected-record-id={selectedProductId}
+                            selected-value={selectedProductName}
+                            onrecordselection={productSelectionHandler}
+                            onrecordremoved={productRemovedHandler}>
+                        </c-lwc-lookup>
+                    </div>
+                    <div class="slds-col slds-size_1-of-15"></div>
+                    <div class="slds-col slds-size_5-of-15">
+                        <c-lwc-lookup   
+                            lookup-label="" 
+                            lookup-placeholder="Search Supplier"
+                            object-api-name="Account"
+                            icon-name="standard:account"
+                            query-fields={account_QueryFields}
+                            query-filters={account_QueryFilters}
+                            order-by-fields-with-order={account_OrderBy}
+                            record-limit={account_RecordLimit}
+                            selected-record-id={selectedVendorId}
+                            selected-value={selectedVendorName}
+                            onrecordselection={vendorSelectionHandler}
+                            onrecordremoved={vendorRemovedHandler}>
+                        </c-lwc-lookup>
+                    </div>
+                    <div class="slds-col slds-size_4-of-15">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <template if:true={inventoryRecords}>
+                <template if:true={isLoading}>
+                    <lightning-spinner 
+                        alternative-text="Loading" 
+                        size="medium">
+                    </lightning-spinner>
+                </template>
+                <template if:false={isLoading}>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-top_medium">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">Select</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Reorder Pt</th>
+                                <th scope="col">Quantity On Hand</th>
+                                <th scope="col">Quantity Reserved</th>
+                                <th scope="col">PO Quantity</th>
+                                <th scope="col">Reorder Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={paginatedRecords} for:item="record">
+                                <tr key={record.id}>
+                                    <td>
+                                        <input 
+                                            type="checkbox" 
+                                            data-id={record.Id} 
+                                            checked={record.isSelected} 
+                                            onchange={handleProductCheckboxChange}/>
+                                    </td>
+                                    <td>{record.Name}</td>
+                                    <td>{record.IMagic__Reorder_Level__c}</td>
+                                    <td>{record.Lodestone__Quantity_On_Hand__c}</td>
+                                    <td>{record.IMagic__Quantity_Reserved__c}</td>
+                                    <td>{record.IMagic__PO_Quantity__c}</td>
+                                    <td>{record.IMagic__Reorder_Quantity__c}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+            </template>
+        </div>
+          <footer style="text-align: center;padding:.5em" class="slds-grid slds-grid_align-spread slds-p-horizontal_small">
+            <lightning-button 
+                variant="brand"
+                class="my-btn"
+                label="Create Purchase Orders"
+                onclick={handleCreatePurchaseOrders}>
+            </lightning-button>
+            <lightning-button-group>
+                <lightning-button 
+                    label="Previous" 
+                    onclick={handlePreviousPage} 
+                    disabled={isFirstPage}>
+                </lightning-button>
+                <lightning-button 
+                    label="Next" 
+                    onclick={handleNextPage} 
+                    disabled={isLastPage}>
+                </lightning-button>
+            </lightning-button-group>
+        </footer>
+    </article>
+    <!-- <lightning-card>
+      
+        
+       
+    </lightning-card> -->
+</template>

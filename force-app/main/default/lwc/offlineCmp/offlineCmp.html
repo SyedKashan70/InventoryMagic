@@ -1,0 +1,130 @@
+<!--
+  @description       : 
+  @author            : Syed Kashan
+  @group             : 
+  @last modified on  : 07-05-2025
+  @last modified by  : Syed Kashan
+-->
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        <p class="slds-text-body_regular slds-m-top_small">Syncing records, please wait...</p>
+    </template>
+
+    <template if:true={isMainView}>
+        <div class="slds-p-around_medium">
+            
+            <!-- Status Bar -->
+            <div class="slds-grid slds-align_absolute-center slds-m-bottom_medium">
+                <div class="slds-col">
+                    <template if:true={isOnline}>
+
+                                        
+                    <lightning-button-icon icon-name="utility:sync"  
+                    alternative-text="Sync" title="Sync" onclick={handleSync} 
+                    class="slds-float_left"></lightning-button-icon>
+                    </template>
+                </div>
+                <div class="slds-col slds-text-align_center">
+                    <span class="slds-text-heading_small">My Offline Records</span>
+                </div>
+                <div class="slds-col">
+                    <template if:false={isOnline}>
+                        <!-- Create Order Button -->
+                        <lightning-button-icon 
+                            icon-name="utility:add" 
+                            alternative-text="Create Order" 
+                            title="Create Order" 
+                            onclick={handleCreateOrderClick} 
+                            class="slds-float_right slds-p-left_small"
+                            variant="border-filled">
+                        </lightning-button-icon>
+                    
+                        <!-- Create Quote Button -->
+                        <lightning-button-icon 
+                            icon-name="utility:edit_form" 
+                            alternative-text="Create Quote" 
+                            title="Create Quote" 
+                            onclick={handleCreateQuoteClick} 
+                            class="slds-float_right slds-p-right_small"
+                            variant="border-filled">
+                        </lightning-button-icon>
+
+                        <!-- reserve order button -->
+                        <lightning-button-icon 
+                            icon-name="utility:bookmark" 
+                            alternative-text="Reserve Order" 
+                            title="Reserve Order" 
+                            onclick={handleReserveOrderClick} 
+                            class="slds-float_right slds-p-right_small"
+                            variant="border-filled">
+                        </lightning-button-icon>
+
+                    </template>
+                    
+                </div>
+            </div>
+
+            
+            <!-- Last Updated Card -->
+            <div class="slds-p-around_small slds-border_top slds-m-top_medium">
+                <p class="slds-text-align_center slds-text-body_small"><strong>{internetStatus}</strong></p>
+                <p class="slds-text-align_center slds-text-body_small">Last synced: <strong>{lastSynced}</strong></p>
+            </div>
+
+            <!-- Records Grid -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Warehouses" count={wareHouseSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Warehouse" data-cache="cachedWarehouse" onitemclick={handleItemClick}></c-record-view>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Stocking Locations" count={stockingLocationsSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Stocking Location" data-cache="cachedStockingLocations" onitemclick={handleItemClick}></c-record-view>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Accounts" count={customerAccountSize} icon-name="standard:account" color="#5A55FF" 
+                    data-obj="Account" data-cache="cachedCustomerAccounts" onitemclick={handleItemClick}></c-record-view>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Products" count={productsSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Product" data-cache="cachedProducts" onitemclick={handleItemClick}></c-record-view>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Quotes" count={quoteSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Quote" data-cache="cachedOfflineQuotes" onitemclick={handleItemClick}></c-record-view>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Orders" count={orderSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Order" data-cache="cachedOfflineOrders" onitemclick={handleItemClick}></c-record-view>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <c-record-view label="Order Items" count={orderItemToReserveSize} icon-name="standard:account" color="#5A55FF"
+                    data-obj="Order Item" data-cache="cachedorderItemToReserve" onitemclick={handleItemClick}></c-record-view>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+    <template if:true={isOrderView}>
+        <c-create-order-offline oncancel={handleChildCancel}></c-create-order-offline>
+    </template>
+
+    
+    <template if:true={isQuoteView}>
+        <c-quote-cmp-offline oncancel={handleChildCancel}></c-quote-cmp-offline>
+    </template>
+
+    <template if:true={isReserveOrderView}>
+        <c-reserve-order-items-offline oncancel={handleChildCancel}></c-reserve-order-items-offline>
+    </template>
+
+    
+    <template if:true={isRecordLstView}>
+        <c-record-view-List record-list={cacheRecordList} obj-name={recordListViewObj} onback={handleBack}></c-record-view-List>
+    </template>
+</template>

@@ -1,0 +1,21 @@
+<apex:page standardController="Transaction_History__c">
+    <h1 class="slds-text-heading_large slds-text-align_center">Transaction History</h1>
+
+    <!-- Section for the message -->
+    <div class="slds-grid slds-grid_vertical-align-center slds-m-top_medium slds-m-bottom_medium">
+        <div class="slds-col slds-size_1-of-1 slds-p-around_medium">
+            <!-- SLDS Alert Box to display the message -->
+            <div class="slds-notify slds-notify_toast slds-theme_warning slds-notify_alert">
+                <span class="slds-assistive-text">Warning</span>
+                <h2 class="slds-text-heading_small slds-text-color_error">No new records will be created.</h2>
+                <p class="slds-text-body_regular slds-text-color_weak">This page is intended only for viewing existing transaction history. No new entries can be added here.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional section for additional content or instructions -->
+    <div class="slds-text-align_center slds-m-top_large">
+        <p class="slds-text-body_regular">If you need to add new records, please navigate to the appropriate section of the app.</p>
+    </div>
+
+</apex:page>

@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:actionOverride,lightning:isUrlAddressable,force:hasRecordId" access="global">
+        <c:createNewWarehouseLWC />
+</aura:component>

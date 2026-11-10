@@ -1,0 +1,8 @@
+button.slds-button.slds-button_icon.slds-input__icon.slds-input__icon_right {
+    margin: -0.4375rem;
+}
+
+.search-icon-modal {
+    position: absolute;
+    right: 0px;
+}

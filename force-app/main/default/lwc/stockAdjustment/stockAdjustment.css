@@ -1,0 +1,59 @@
+.btn-width{
+  width:50%;
+  float:left ;
+}
+
+.delete-btn{
+  --slds-c-icon-color-foreground:red;
+}
+
+:host .rounded-btn{
+  --slds-c-button-radius-border: 90%;
+  margin-left: 5px;
+}
+
+.home_div, img {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  /* .img-anim {
+    display: none;
+  }
+  
+  .home_div:hover .img-anim {
+    display: inline-block;
+  }
+  
+  .home_div:hover .img-still{
+    display: none;
+  } */
+
+  
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+visibility: hidden;
+width: 120px;
+background-color: black;
+color: #fff;
+text-align: center;
+padding: 5px 0;
+border-radius: 6px;
+
+/* Position the tooltip text - see examples below! */
+position: absolute;
+z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+visibility: visible;
+}

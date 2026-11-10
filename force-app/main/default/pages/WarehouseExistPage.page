@@ -1,0 +1,20 @@
+<apex:page standardController="Warehouse__c">
+    <apex:includeLightning />
+    <div id="lightning"> </div>
+    <script>
+        document.addEventListener('lightning__showtoast', event => {
+            sforce.one.showToast(event.toastAttributes);
+        });
+        $Lightning.use(
+            "IMagic:WarehouseExistApp",
+            function () {
+                $Lightning.createComponent(
+                    "IMagic:createNewWarehouseLWC",
+                    {},
+                    "lightning"
+                );
+            }
+        );
+
+    </script>
+</apex:page>

@@ -1,0 +1,18 @@
+<apex:page standardController="Magic_Transfer__c">
+    <apex:includeLightning />
+    <div id="lightning"></div>
+    <script>
+        // Listen for toast events if needed
+        document.addEventListener('lightning__showtoast', event => {
+            sforce.one.showToast(event.toastAttributes);
+        });
+        // Load the Lightning app that wraps your Aura component
+        $Lightning.use("IMagic:MagicTransferApp", function () {
+            $Lightning.createComponent(
+                "IMagic:magicTransfer",
+                {},
+                "lightning"
+            );
+        });
+    </script>
+</apex:page>

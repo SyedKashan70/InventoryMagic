@@ -1,0 +1,4 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:actionOverride,lightning:isUrlAddressable,force:hasRecordId" access="global">
+
+        <c:magicTransfer />
+</aura:component>

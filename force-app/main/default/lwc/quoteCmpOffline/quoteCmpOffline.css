@@ -1,0 +1,91 @@
+.my-btn {
+    margin: .5em;
+    --sds-c-button-brand-color-background: #003d6b;
+    --sds-c-button-brand-color-border: #003d6b;
+}
+
+.delete-btn {
+    --slds-c-icon-color-foreground: red;
+}
+
+/* Remove bottom borders from table cells */
+.table-wrapper .slds-table_bordered th,
+.table-wrapper .slds-table_bordered td {
+    border-bottom: none;
+}
+
+/* Utility Classes for Responsive Visibility */
+.desktop-only {
+    display: block;
+}
+.mobile-only {
+    display: none;
+}
+
+.actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 480px) {
+    .desktop-only {
+        display: none;
+    }
+    .mobile-only {
+        display: block;
+    }
+
+    /* Mobile Card View Styling */
+    .mobile-card {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1em;
+    }
+    .card-item {
+        background-color: #fff;
+        padding: 1em;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+    }
+    .card-field {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5em 0;
+        /* Remove any bottom borders */
+        border-bottom: none;
+    }
+
+    /* Position the Actions/Buttons bar at the bottom */
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* Or any fixed height if not full viewport */
+    }
+    
+    /* The content area will grow and scroll if needed */
+    .content-scrollable {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        /* Add bottom padding equal to the height of the actions, so content isn’t hidden */
+        padding-bottom: 80px; 
+    }
+    
+    /* Make the actions container stick at the bottom of the scrollable area */
+    .actions {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff; /* Ensures readability */
+        padding: 1rem;
+        z-index: 1000;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    }
+    /* Add extra margin so the card content isn’t hidden behind the fixed buttons */
+    .responsive-card {
+        margin-bottom: 70px;
+    }
+    
+}

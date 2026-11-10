@@ -1,0 +1,102 @@
+.home_div, img {
+    /* background-color: #fff; */
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+  
+  }
+  /*.img-anim {
+    display: none;
+  }
+    .home_div .img-anim {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  } 
+  .home_div:hover .img-anim {
+    display: inline-block;
+  }
+  
+  .home_div:hover .img-still{
+    display: none;
+  }*/
+  
+  .reserve-btn{
+    --sds-c-button-brand-color-background: #003d6b;
+    --sds-c-button-brand-color-border: #003d6b;
+    --sds-c-button-brand-color-background-hover: #03599b;
+    --sds-c-button-brand-color:#fff;
+  }
+  
+  .neutral-btn{
+    --sds-c-button-neutral-color-background: #ffffff;
+    --sds-c-button-neutral-color-border: #a0a0a0;
+    --sds-c-button-neutral-color:#003d6b;
+    margin-left: 5px;
+  }
+  
+  .btn-width{
+      width:50%;
+      float:left ;
+    }
+    
+    :host .rounded-btn{
+      --slds-c-button-radius-border: 90%;
+      
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    }
+    
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+    visibility: visible;
+    }
+  
+  
+  
+  .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+  }
+  
+  .table-header {
+      background-color: #f3f3f3; /* Light grey for header */
+      font-weight: bold;
+      text-align: left;
+  }
+  
+  .table-cell {
+      padding: 0.5rem;
+      border-bottom: 1px solid #e0e0e0; /* Light grey for cell borders */
+  }
+  
+  .table-row:hover {
+      background-color: #f9f9f9; /* Light hover effect for rows */
+  }
+  
+  .table-cell input[type="number"] {
+      width: 100px; /* Fixed width for number inputs */
+  }

@@ -1,0 +1,181 @@
+<template>
+    <!-- class="slds-box slds-theme_default" -->
+    <div style={backgroundStyle}>
+        <!-- <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+              <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconST_anim} class="img-anim">
+                <img src={iconST_still} class="img-still">
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+              <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Magic Transfer</h2>
+            </div>
+          </header> -->
+          <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-size_12-of-12">
+            <div class="slds-grid slds-wrap slds-size_12-of-12">
+           <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_7-of-12">
+               <div style="float: left;" class="home_div">
+                <img src={iconST_anim} class="img-anim">
+                 </div>
+               <h2 style="color:#fff" class="slds-text-heading_medium">&nbsp;&nbsp; Magic Transfer</h2>
+           </div>
+       </div>
+        </header>
+
+          <!-- <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+              <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconST_anim} class="img-anim">
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+              <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Magic Transfer</h2>
+            </div>
+          </header> -->
+        <!-- <h2 class="slds-text-heading_medium">Magic Transfer</h2> -->
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="loading-spinner">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={mainStockingLocation}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_x-small">
+            <c-lwc-lookup   
+                lookup-label="Source Warehouse" 
+                object-api-name="IMagic__Warehouse__c" 
+                icon-name="standard:product"
+                selected-record-id={mainStockingLocation.IMagic__Warehouse__c}
+                selected-value={mainStockingLocation.IMagic__Warehouse__r.Name}
+                class="lookup-input"
+                is-disable="true"
+                block-change-record="true"
+            ></c-lwc-lookup>
+        </div>
+
+        <div class="slds-col slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_x-small">
+            <c-lwc-lookup   
+                lookup-label="Source Stocking Location" 
+                object-api-name="IMagic__Stocking_Location__c" 
+                icon-name="standard:product"
+                selected-record-id={mainStockingLocation.Id}
+                selected-value={mainStockingLocation.Name}
+                class="lookup-input"
+                is-disable="true"
+                block-change-record="true"
+            ></c-lwc-lookup>
+        </div>
+            
+        <div class="slds-col slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_x-small">
+            <c-lwc-lookup   
+                lookup-label="Destination Stocking Location" 
+                object-api-name="IMagic__Stocking_Location__c" 
+                icon-name="standard:product"
+                query-fields={destinationStockingLocation_QueryFields}
+                query-filters={destinationStockingLocation_QueryFilters}
+                order-by-fields-with-order={destinationStockingLocation_OrderBy}
+                record-limit={destinationStockingLocation_RecordLimit}
+                selected-record-id={destinationStockingLocationId}
+                selected-value={destinationStockingLocationName}
+                onrecordselection={destinationStockingLocationSelectionHandler}
+                onrecordremoved={destinationStockingLocationRemovedHandler}
+                style="margin-bottom: 20px;background-color:red"
+            ></c-lwc-lookup>
+            <!-- 
+                class="lookup-input" -->
+        </div>
+        </div>
+        </template>
+
+
+        <template if:true={magicTransferObject}>
+            <lightning-accordion  allow-multiple-sections-open>
+                <template for:each={magicTransferObject} for:item="magic">
+                    <div key={magic.orderNumber}>
+                        <lightning-accordion-section name={magic.orderNumber} label={magic.orderNumber} >
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-tree slds-table_tree stockTables"
+                            aria-label="">
+                                <thead>
+                                    <tr class="slds-text-title_bold header-row">
+                                        <th style="text-align: center;" scope="col">Select</th>
+                                        <th style="text-align: center;" scope="col">Order Number</th>
+                                        <th style="text-align: center;" scope="col">Product</th>
+                                        <th style="text-align: center;" scope="col">Ordered Quantity</th>
+                                        <th style="text-align: center;" scope="col">Transfer Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={magic.magicLineList} for:item="row">
+                                        <tr key={row.orderItemId} aria-level="2">
+                                            <td style="text-align: center;" data-label="Select">
+                                                <lightning-input
+                                                    type="checkbox"
+                                                    data-id={row.orderItemId}
+                                                    data-ordernum={row.orderNumber}
+                                                    onchange={handleCheckboxChange}
+                                                    checked={row.isSelected}
+                                                ></lightning-input>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <div>{row.orderNumber}</div>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <div>{row.selectedProductName}</div>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <div>{row.orderItemQuantity}</div>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <lightning-input type="number"
+                                                    value={row.transferQuantity}
+                                                    label=""
+                                                    onchange={handleTransferQuantityChange}
+                                                    data-id={row.orderItemId}
+                                                    data-ordernum={row.orderNumber}
+                                                    max={row.orderItemTransferPendingQuantity}
+                                                    min={row.minTransferQuantity}
+                                                    class="validate">
+                                                </lightning-input>
+                                                <p>Magic Pending Quantity : {row.orderItemTransferPendingQuantity}</p>
+                                                
+                                                
+                                                <template if:true={row.showSerialModalIcon}>
+                                                    <lightning-button data-id={row.orderItemId} 
+                                                    data-ordernum={row.orderNumber} label="Add Serial # " onclick={handleAddSerialClick}></lightning-button >
+                                                </template>
+                                            </td>
+                                        </tr>  
+                                    </template>
+                                </tbody>
+                            </table>
+                        </lightning-accordion-section>
+                    </div>     
+                </template>
+            </lightning-accordion>
+
+            
+        </template>
+
+        <div class="slds-align_absolute-center" style="margin-top: 20px;">
+            <lightning-button-group>
+                <lightning-button 
+                    variant="brand" 
+                    label="Save" 
+                    onclick={handleSave} 
+                    class="action-button" 
+                ></lightning-button>
+            </lightning-button-group>
+        </div>
+
+    </div>
+    <template if:true={showSerialModal}>
+        <c-add-serial-modal
+        onclose={handleCloseModal}
+        onsaveserials={handleSaveSerials}
+        serial-record={serialRecord}></c-add-serial-modal>
+    </template>
+</template>

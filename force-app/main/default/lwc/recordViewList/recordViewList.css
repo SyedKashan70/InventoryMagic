@@ -1,0 +1,77 @@
+/* accountList.css */
+.accounts-container {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #333;
+    position: relative; /* Added for back button positioning */
+}
+
+.back-button-container {
+    margin-bottom: 10px;
+}
+
+.header {
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.subheader {
+    color: #3498db;
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.account-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.account-item {
+    display: flex;
+    justify-content: center;
+}
+.account-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 16px;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center */
+    height: 150px; /* Optional: set fixed height for uniform cards */
+    transition: transform 0.2s ease;
+}
+
+
+.account-card:hover {
+    transform: translateY(-2px);
+}
+
+.account-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.account-link {
+    color: #0070d2; /* Salesforce blue */
+    font-size: 0.9rem;
+}

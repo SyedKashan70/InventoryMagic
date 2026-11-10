@@ -1,0 +1,264 @@
+<template>
+    <!-- style="height: 100%; overflow-y: auto;" -->
+    <div style={backgroundStyle}>
+        <!-- Header Section -->
+        <!-- <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconSA_anim} class="img-anim">
+                <img src={iconSA_still} class="img-still">
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+                <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">
+                    Stock Adjustment
+                </h2>
+            </div>
+            
+        </header> -->
+
+        <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-size_12-of-12">
+            <div class="slds-grid slds-wrap slds-size_12-of-12">
+           <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_7-of-12">
+               <div style="float: left;" class="home_div">
+                <img src={iconSA_anim} class="img-anim">
+                <!-- <img src={iconSA_still} class="img-still"> -->
+                 </div>
+               <h2 style="color:#fff" class="slds-text-heading_medium">&nbsp;&nbsp; Stock Adjustment</h2>
+           </div>
+           <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+           <template if:true={mainStockingLocation}>
+            <div class="slds-grid slds-wrap slds-size_12-of-12">
+                <div class="slds-col slds-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+                    <c-lwc-lookup   
+                        object-api-name="IMagic__Warehouse__c" 
+                        icon-name="standard:product"
+                        selected-record-id={mainStockingLocation.IMagic__Warehouse__c}
+                        selected-value={mainStockingLocation.IMagic__Warehouse__r.Name}
+                        is-disable="true"
+                        block-change-record="true"
+                        class="lookup-input"
+                    ></c-lwc-lookup>
+                </div>
+                &nbsp;&nbsp;
+                <div class="slds-col slds-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+                    <c-lwc-lookup   
+                        object-api-name="IMagic__Stocking_Location__c" 
+                        icon-name="standard:product"
+                        query-fields={sourceStockingLocation_QueryFields}
+                        query-filters={sourceStockingLocation_QueryFilters}
+                        order-by-fields-with-order={sourceStockingLocation_OrderBy}
+                        record-limit={sourceStockingLocation_RecordLimit}
+                        selected-record-id={sourceStockingLocationId}
+                        selected-value={sourceStockingLocationName}
+                        onrecordselection={sourceStockingLocationSelectionHandler}
+                        onrecordremoved={sourceStockingLocationRemovedHandler}
+                    ></c-lwc-lookup>
+                </div>
+            </div>
+        </template>
+    </div>
+       </div>
+        </header>
+
+        <template if:true={isLoading}>
+            <div class="loading-spinner">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Stocking Location Section -->
+        <!--  -->
+        <template if:true={stockAdjustmentLine.length}>
+            <!-- <div class="slds-card__body slds-card__body_inner" style="height: 400px; max-width: 100%;overflow-y: scroll;overflow-x: hidden;"> -->
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" style="border-left: 1px solid #d8dde6; border-right: 1px solid #d8dde6;">
+                    <thead>
+                        <tr class="slds-text-heading_small">
+                            <!-- <th scope="col" style="text-align: center;"><div class="slds-truncate">Row Number</div></th> -->
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Product</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Inventory</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Qty On Hand</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Action</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Adjustment Type</div></th>
+                            <th scope="col" style="text-align: center;width:10%"><div class="slds-truncate">New Qty</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Adjustment Reason</div></th>
+                            <th scope="col" style="text-align: center;"><div class="slds-truncate">Delete</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={stockAdjustmentLine} for:item="row">
+                            <tr key={row.rowNumber}>
+                                <!-- <td>
+                                    <p>{row.rowNumber}</p>
+                                </td> -->
+                                <td>
+                                    <c-lwc-lookup   
+                                        lookup-label="" 
+                                        object-api-name="Product2" 
+                                        icon-name="standard:product"
+                                        query-fields={product_QueryFields}
+                                        query-filters={product_QueryFilters}
+                                        order-by-fields-with-order={product_OrderBy}
+                                        record-limit={product_RecordLimit}
+                                        selected-record-id={row.productId}
+                                        selected-value={row.productName}
+                                        onrecordselection={productSelectionHandler}
+                                        onrecordremoved={productRemovedHandler}
+                                        data-id={row.rowNumber}
+                                    ></c-lwc-lookup>
+                                </td>
+                                <td>
+                                    <c-lwc-lookup   
+                                        lookup-label="" 
+                                        object-api-name="IMagic__Inventory__c" 
+                                        icon-name="standard:product"
+                                        query-fields={inventory_QueryFields}
+                                        query-filters={row.inventory_QueryFilters}
+                                        order-by-fields-with-order={inventory_OrderBy}
+                                        record-limit={inventory_RecordLimit}
+                                        selected-record-id={row.inventoryId}
+                                        selected-value={row.inventoryName}
+                                        onrecordselection={inventorySelectionHandler}
+                                        onrecordremoved={inventoryRemovedHandler}
+                                        data-id={row.rowNumber}
+                                        is-disable={row.disableInventory}
+                                    ></c-lwc-lookup>
+                                </td>
+                                <td>
+                                    <lightning-input 
+                                        label=""
+                                        type="number"
+                                        value={row.QuantityOnHand}
+                                        data-index={index}
+                                        data-id={row.rowNumber}
+                                        disabled
+                                    ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-combobox
+                                        label=""
+                                        value={row.action}
+                                        options={actionPicklistOptions}
+                                        placeholder="Select an option"
+                                        onchange={handleActionChange}
+                                        data-id={row.rowNumber}>
+                                    </lightning-combobox>
+                                </td>
+                                <td>
+                                    <lightning-combobox
+                                        label=""
+                                        value={row.AdjustmenType}
+                                        options={row.filteredAdjustmentTypePicklistOptions}
+                                        placeholder="Select an option"
+                                        onchange={handleAdjustmentTypeChange}
+                                        data-id={row.rowNumber}>
+                                    </lightning-combobox>
+                                </td>
+                                <td>
+                                    <template if:true={row.isMinusAction}>
+                                        <lightning-input 
+                                            label=""
+                                            type="number"
+                                            value={row.newQuantity}
+                                            data-index={index}
+                                            onchange={handletransferQtyChange}
+                                            data-id={row.rowNumber}
+                                            min="1"
+                                            max={row.QuantityOnHand}
+                                            class="validate"
+                                        ></lightning-input>
+                                    </template>
+                                    <template if:false={row.isMinusAction}>
+                                        <lightning-input 
+                                            label=""
+                                            type="number"
+                                            value={row.newQuantity}
+                                            data-index={index}
+                                            data-name="width"
+                                            onchange={handletransferQtyChange}
+                                            data-id={row.rowNumber}
+                                            min="1"
+                                            class="validate"
+                                        ></lightning-input>
+                                    </template>
+
+                                    <template if:true={row.showSerialModalIcon}>
+                                        <span class="tooltip">
+                                            <lightning-button class="rounded-btn" data-id={row.rowNumber} label=" #" onclick={handleAddSerialClick}></lightning-button>
+                                            <span class="tooltiptext">Select Serial Number</span>
+                                        </span>
+                                    </template>
+
+                                    <template if:true={row.showSerialNumberIcon}>
+                                        <span class="tooltip">
+                                        <lightning-button class="rounded-btn" data-id={row.rowNumber} label=" # " onclick={handleSerialNumberModalClick}></lightning-button >
+                                          <span class="tooltiptext">Add Serial Number</span>
+                                        </span>
+                                    </template>
+                                </td>
+                                <td>
+                                    <lightning-input 
+                                        label=""
+                                        value={row.adjustmentReason}
+                                        data-index={index}
+                                        data-id={row.rowNumber}
+                                        onchange={handleAdjustmentReasonChange}
+                                    ></lightning-input>
+                                </td>
+                                <td>
+                                    <lightning-button-icon 
+                                        icon-name="utility:delete" 
+                                        alternative-text="Delete Row"
+                                        variant="border-filled"
+                                        class="slds-m-left_x-small delete-btn"
+                                        data-index={index}
+                                        onclick={handleDeleteRow}
+                                        data-id={row.rowNumber}
+                                    ></lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            <!-- </div> -->
+        </template>
+
+        <!-- Action Buttons -->
+        <!-- class="slds-align_absolute-center slds-m-top_large" -->
+        
+
+        <!-- Serial Modal -->
+        <template if:true={showSerialModal}>
+            <c-add-serial-modal
+                onclose={handleCloseModal}
+                onsaveserials={handleSaveSerials}
+                serial-record={serialRecord}
+            ></c-add-serial-modal>
+        </template>
+
+        <template if:true={showSerialNumberModal}>
+            <c-add-serial-number-modal
+                onclose={handleCloseModal}
+                onsaveserialnumbers={handleSaveSerialNumbers}
+                rowdetail={serialRecord}>
+            </c-add-serial-number-modal>
+        </template>
+
+    </div>
+    <div class="slds-align_absolute-center" style="margin-top: 10px;">
+        <lightning-button-group>
+            <lightning-button 
+                variant="neutral" 
+                label="Add Row" 
+                onclick={handleAddRow} 
+                class="action-button"
+            ></lightning-button>
+            <lightning-button 
+                variant="brand" 
+                label="Save" 
+                onclick={handleSave} 
+                class="action-button slds-m-right_x-small"
+            ></lightning-button>
+        </lightning-button-group>
+    </div>
+</template>

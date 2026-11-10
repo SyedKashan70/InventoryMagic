@@ -1,0 +1,221 @@
+<template>
+    <div style={backgroundStyle} class="slds-grid slds-wrap">
+        <!-- <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+              <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconST_anim} class="img-anim">
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+              <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Stock Transfer</h2>
+            </div>
+          </header> -->
+          <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-size_12-of-12">
+            <div class="slds-grid slds-wrap slds-size_12-of-12">
+           <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_7-of-12">
+               <div style="float: left;" class="home_div">
+                <img src={iconST_anim} class="img-anim">
+                 </div>
+               <h2 style="color:#fff" class="slds-text-heading_medium">&nbsp;&nbsp; Stock Transfer</h2>
+           </div>
+       </div>
+        </header>
+            <template if:true={isLoading}>
+                <div class="loading-spinner">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+        <!-- Toggle Button for Multi-Warehouse Transfer -->
+        <!-- <lightning-layout class="slds-m-bottom_medium">
+            <lightning-layout-item>
+                <lightning-input type="checkbox" 
+                    label="Allow Multi-Warehouse Transfer" 
+                    checked={isMultiWarehouseTransfer} 
+                    onchange={handleToggleMultiWarehouseTransfer}>
+                </lightning-input>
+            </lightning-layout-item>
+        </lightning-layout> -->
+  
+        <c-lwc-lookup   
+            lookup-label="Source Warehouse" 
+            object-api-name="IMagic__Warehouse__c" 
+            icon-name="standard:product"
+            query-fields={sourceWarehouse_QueryFields}
+            query-filters={sourceWarehouse_QueryFilters}
+            order-by-fields-with-order={sourceWarehouse_OrderBy}
+            record-limit={sourceWarehouse_RecordLimit}
+            selected-record-id={sourceWarehouseId}
+            selected-value={sourceWarehouseName}
+            onrecordselection={sourceWarehouseSelectionHandler}
+            onrecordremoved={sourceWarehouseRemovedHandler}
+        ></c-lwc-lookup>
+  
+        <div class="slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" style="margin-bottom: 10px;">
+            <template if:true={isMultiWarehouseTransfer} >
+                <c-lwc-lookup   
+                    lookup-label="Destination Warehouse" 
+                    object-api-name="IMagic__Warehouse__c" 
+                    icon-name="standard:product"
+                    query-fields={destinationWarehouse_QueryFields}
+                    query-filters={destinationWarehouse_QueryFilters}
+                    order-by-fields-with-order={destinationWarehouse_OrderBy}
+                    record-limit={destinationWarehouse_RecordLimit}
+                    selected-record-id={destinationWarehouseId}
+                    selected-value={destinationWarehouseName}
+                    onrecordselection={destinationWarehouseSelectionHandler}
+                    onrecordremoved={destinationWarehouseRemovedHandler}
+                    is-disable={disableScreen}
+                ></c-lwc-lookup>
+            </template>
+        </div>
+  
+        <!-- <div style="overflow-x: auto; height:auto;" class="slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12"> -->
+        <table style="width:100%; height:auto" class="slds-table slds-table_bordered slds-table_col-bordered line-separated">
+            <thead>
+                <tr class="slds-text-title_bold header-row">
+                    <th scope="col">Source Stocking Location</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Destination Stocking Location</th>
+                    <th scope="col">Transfer Quantity</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={stockTransferTable} for:item="row">
+                    <tr key={row.rowNumber}>
+                        <td>
+                            <!-- lookup-label=""  -->
+                            <c-lwc-lookup   
+                                style="position: relative;"
+                                object-api-name="IMagic__Stocking_Location__c" 
+                                icon-name="standard:product"
+                                query-fields={sourceStockingLocation_QueryFields}
+                                query-filters={sourceStockingLocation_QueryFilters}
+                                order-by-fields-with-order={sourceStockingLocation_OrderBy}
+                                record-limit={sourceStockingLocation_RecordLimit}
+                                selected-record-id={row.sourceStockingLocationId}
+                                selected-value={row.sourceStockingLocationName}
+                                onrecordselection={sourceStockingLocationSelectionHandler}
+                                onrecordremoved={sourceStockingLocationRemovedHandler}
+                                data-id={row.rowNumber}
+                                is-disable={disableScreen}
+                            ></c-lwc-lookup>
+                        </td>
+                        <td>
+                            <!-- lookup-label=""  -->
+                            <c-lwc-lookup   
+                                
+                                object-api-name="IMagic__Inventory__c" 
+                                icon-name="standard:product"
+                                query-fields={product_QueryFields}
+                                query-filters={row.product_QueryFilters}
+                                order-by-fields-with-order={product_OrderBy}
+                                record-limit={product_RecordLimit}
+                                selected-record-id={row.selectedProductId}
+                                selected-value={row.selectedProductName}
+                                selected-value-name={product_selectedValueName}
+                                selected-label-name={product_selectedLabelName}
+                                onrecordselection={productSelectionHandler}
+                                onrecordremoved={productRemovedHandler}
+                                data-id={row.rowNumber}
+                                is-disable={row.disableProduct}
+                            ></c-lwc-lookup>
+                        </td>
+  
+                        <td>
+                            <!-- lookup-label=""  -->
+                            <c-lwc-lookup   
+                            
+                            object-api-name="IMagic__Stocking_Location__c" 
+                            icon-name="standard:product"
+                            query-fields={destinationStockingLocation_QueryFields}
+                            query-filters={row.destinationStockingLocation_QueryFilters}
+                            order-by-fields-with-order={destinationStockingLocation_OrderBy}
+                            record-limit={destinationStockingLocation_RecordLimit}
+                            selected-record-id={row.destinationStockingLocationId}
+                            selected-value={row.destinationStockingLocationName}
+                            onrecordselection={destinationStockingLocationSelectionHandler}
+                            onrecordremoved={destinationStockingLocationRemovedHandler}
+                            data-id={row.rowNumber}
+                            is-disable={row.disableDestinationLocation}
+                        ></c-lwc-lookup>
+                        </td>
+                        <td style="width:15%">
+                            <!-- label="" -->
+                            <lightning-input type="number"
+                                value={row.transferQuantity}
+                                variant="label-hidden"
+                                data-name="width"
+                                onchange={handleTransferQuantityChange}
+                                data-id={row.rowNumber}
+                                disabled={disableScreen}
+                                class="validate"
+                                max={row.sourceStockingLocationavailbleQuantity}
+                                min="1">
+                            </lightning-input>
+                            
+                            
+                            <template if:true={row.showSerialModalIcon}>
+                                <span class="tooltip">
+                                <lightning-button style="margin-left: 5px;" class="rounded-btn" data-id={row.rowNumber} label="#" onclick={handleAddSerialClick}></lightning-button >
+                                    <span class="tooltiptext">Add Serial</span>
+                                </span>
+                                </template>
+                                <!-- <br>-->
+                                <p style="float: left;">Available Quantity : {row.sourceStockingLocationavailbleQuantity}</p> 
+                        </td>
+                        <td>
+                            <!-- label="" -->
+                            <lightning-input type="text"
+                                value={row.description}
+                                variant="label-hidden"
+                                onchange={handleDescriptionChange}
+                                data-id={row.rowNumber}
+                                disabled={disableScreen}>
+                            </lightning-input>
+                        </td>
+                        <td>
+                            <lightning-button-icon 
+                                icon-name="utility:delete" 
+                                alternative-text="Delete Row"
+                                variant="border-filled"
+                                class="slds-m-left_x-small delete-btn"
+                                data-index={index}
+                                onclick={handleDeleteRow}
+                                data-id={row.rowNumber}
+                            ></lightning-button-icon>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    <!-- </div> -->
+       
+    </div>
+     <!-- Buttons for Add Row and Save -->
+     <div class="slds-align_absolute-center" style="margin-top: 10px;">
+        <lightning-button-group>
+            <lightning-button 
+                variant="neutral" 
+                label="Add Row" 
+                onclick={handleAddRow} 
+                class="action-button"
+            ></lightning-button>
+            
+            <lightning-button 
+                variant="brand" 
+                label="Save" 
+                onclick={handleSave} 
+                class="action-button" 
+            ></lightning-button>
+        </lightning-button-group>
+    </div>
+  
+    <template if:true={showSerialModal}>
+        <c-add-serial-modal
+        onclose={handleCloseModal}
+        onsaveserials={handleSaveSerials}
+        serial-record={serialRecord}></c-add-serial-modal>
+    </template>
+  </template>

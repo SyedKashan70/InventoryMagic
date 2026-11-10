@@ -1,0 +1,167 @@
+<template>
+    <p class="slds-text-heading_medium slds-p-around_medium">Create Quote (Offline)</p>
+
+    <!-- Account & Location Lookup -->
+    <div class="slds-grid slds-wrap slds-p-around_medium">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-around_small">
+            <c-lwc-lookup-offline 
+                lookup-label="Customer Account"
+                lookup-placeholder="Search Account"
+                icon-name="standard:account"
+                cache-records-name="cachedCustomerAccounts"
+                selected-record-id={selectedAccountId}
+                selected-value={selectedAccountName}
+                onrecordselection={accountSelectionHandler}
+                onrecordremoved={accountRemovedHandler}>
+            </c-lwc-lookup-offline>
+        </div>
+
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-around_small">
+            <c-lwc-lookup-offline 
+                lookup-label="Stocking Location"
+                lookup-placeholder="Search Location"
+                icon-name="standard:location"
+                cache-records-name="cachedStockingLocations"
+                selected-record-id={selectedLocationId}
+                selected-value={selectedLocationName}
+                onrecordselection={locationSelectionHandler}
+                onrecordremoved={locationRemovedHandler}
+                query-filters={location_QueryFilters}>
+            </c-lwc-lookup-offline>
+        </div>
+    </div>
+
+
+    <template if:false={isMobile}>
+        <div class="slds-p-horizontal_medium">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={productsTable} for:item="product">
+                        <tr key={product.rowNumber}>
+                            <td>
+                                <c-lwc-lookup-offline  
+                                    variant="label-hidden" 
+                                    lookup-placeholder="Search Product"
+                                    icon-name="standard:product"
+                                    cache-records-name="cachedProducts"
+                                    selected-record-id={product.productId}
+                                    selected-value={product.productName}
+                                    onrecordselection={handleProductSelection}
+                                    data-id={product.rowNumber}
+                                    onrecordremoved={handleProductRemoved}>
+                                </c-lwc-lookup-offline>
+                            </td>
+                            <td>
+                                <lightning-textarea
+                                    variant="label-hidden"
+                                    value={product.description}
+                                    data-id={product.rowNumber}
+                                    onchange={handleDescriptionChange}>
+                                </lightning-textarea>
+                            </td>
+                            <td>
+                                <lightning-input
+                                    type="number"
+                                    variant="label-hidden"
+                                    value={product.quantity}
+                                    data-id={product.rowNumber}
+                                    onchange={handleQuantityChange}
+                                    min="1">
+                                </lightning-input>
+                            </td>
+                            <td>
+                                <lightning-button-icon 
+                                    icon-name="utility:delete"
+                                    alternative-text="Delete"
+                                    data-id={product.rowNumber}
+                                    onclick={handleDeleteRow}
+                                    variant="border-filled">
+                                </lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+
+
+    <template if:true={isMobile}>
+        <div class="mobile-card mobile-only">
+            <template for:each={productsTable} for:item="product">
+                <div key={product.rowNumber} class="card-item">
+                    <div class="card-field">
+                        <span class="label">Product Name | Description:</span>
+                        <span class="value">
+                            <c-lwc-lookup-offline  
+                                variant="label-hidden" 
+                                lookup-placeholder="Search Product"
+                                icon-name="standard:product"
+                                cache-records-name="cachedProducts"
+                                selected-record-id={product.productId}
+                                selected-value={product.productName}
+                                onrecordselection={handleProductSelection}
+                                data-id={product.rowNumber}
+                                onrecordremoved={handleProductRemoved}>
+                            </c-lwc-lookup-offline>
+                        </span>
+                    </div>
+                    <div class="card-field">
+                        <span class="label">Description:</span>
+                        <span class="value">
+                            <lightning-textarea
+                                variant="label-hidden"
+                                value={product.description}
+                                data-id={product.rowNumber}
+                                onchange={handleDescriptionChange}>
+                            </lightning-textarea>
+                        </span>
+                    </div>
+                    <div class="card-field">
+                        <span class="label">Quantity:</span>
+                        <span class="value">
+                            
+                            <lightning-input
+                                type="number"
+                                variant="label-hidden"
+                                value={product.quantity}
+                                data-id={product.rowNumber}
+                                onchange={handleQuantityChange}
+                                min="1">
+                            </lightning-input>
+                        </span>
+                    </div>
+                    <div class="card-field">
+                        <span class="label">Actions:</span>
+                        <span class="value">
+                            
+                            <lightning-button-icon 
+                                icon-name="utility:delete"
+                                alternative-text="Delete"
+                                data-id={product.rowNumber}
+                                onclick={handleDeleteRow}
+                                variant="border-filled">
+                            </lightning-button-icon>
+                        </span>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    
+    <div class="actions">
+        <lightning-button label="Add Row" onclick={handleAddRow} class="slds-m-right_small"></lightning-button>
+        <lightning-button label="Save Quote" variant="brand" onclick={handleSave} class="slds-m-right_small"></lightning-button>
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+    </div>
+</template>

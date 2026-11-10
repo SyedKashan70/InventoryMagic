@@ -1,0 +1,35 @@
+.record-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    margin: 4px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.label-container {
+    flex: 1;
+    margin-left: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+.count-container {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    gap: 4px;
+}

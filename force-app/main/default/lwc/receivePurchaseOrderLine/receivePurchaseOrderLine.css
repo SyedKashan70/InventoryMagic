@@ -1,0 +1,106 @@
+.btn-width{
+  width:60%;
+  float:left ;
+}
+
+:host .rounded-btn{
+  --slds-c-button-radius-border: 90%;
+  
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+visibility: hidden;
+width: 120px;
+background-color: black;
+color: #fff;
+text-align: center;
+padding: 5px 0;
+border-radius: 6px;
+
+/* Position the tooltip text - see examples below! */
+position: absolute;
+z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+visibility: visible;
+}
+
+
+
+ .home_div, img {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+}
+/*
+.img-anim {
+  display: none;
+}
+ .home_div .img-anim {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+} 
+.home_div:hover .img-anim {
+  display: inline-block;
+}
+
+.home_div:hover .img-still{
+  display: none;
+}*/
+
+/* Make all labels bold */
+.lightning-input label {
+    font-weight: bold;
+  }
+  
+  /* Adjust the size of the card */
+  .slds-card {
+    /* Adjust the width as needed */
+    /* width: 90%;  */
+    /* margin: auto; */
+  }
+  
+  /* Adjust the grid column size */
+  .slds-col {
+    /* flex: 0 0 14.2857%;  */
+    /* 1/7th of the width */
+  }
+  
+  .slds-card__header-title {
+    font-size: 1.25rem;
+    font-weight: normal;
+    justify-content: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .slds-card__header {
+    border-bottom: 2px solid rgb(229, 229, 229);
+  }
+
+  .save-btn{
+    --sds-c-button-brand-color-background: #003d6b;
+    --sds-c-button-brand-color-border: #003d6b;
+    --sds-c-button-brand-color-background-hover: #03599b;
+  }
+
+  .cancel-btn{
+    --sds-c-button-brand-color-background: #ffffff;
+    --sds-c-button-brand-color-border: #003d6b;
+    /* --sds-c-button-brand-color-background-hover: #03599b; */
+    --sds-c-button-brand-color-text: #003d6b;
+  }

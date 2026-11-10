@@ -1,0 +1,131 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    </template>
+
+    <div style={backgroundStyle} >
+        <header style="background-color:#003d6b; padding:.5em" class="slds-grid slds-wrap slds-col slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <!-- <div class="slds-media__body slds-grid"> -->
+              <div style="text-align: center;" class="slds-col slds-small-size_1-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12 ">
+                <div class="home_div">
+                <img src={iconRO_anim} class="img-anim">
+                <!-- <img src={iconOR_still} class="img-still"> -->
+              </div>
+            </div>
+            <div class="slds-col slds-small-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+              <h2 style="text-align: left; color: #fff;" class="slds-text-heading_medium">Reserve Order Product</h2>
+            </div>
+            <!-- </div> -->
+          </header>
+
+        <template if:false={orderProducts.length}>
+            <p style="text-align: center; font-weight: bold;">All products reserved</p>
+        </template>
+        <template if:true={orderProducts.length}>
+            <div class="slds-card__body slds-card__body_inner" style="overflow-x: auto; max-width: 100%;">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" style="border-left: 1px solid #d8dde6; border-right: 1px solid #d8dde6;">
+                    <thead>
+                        <tr class="slds-text-heading_small">
+                            <th scope="col" style="width:2%;text-align: center;"><div class="slds-truncate">Action</div></th>
+                            <th scope="col" style="width:2%;text-align: center;"><div class="slds-truncate">Product</div></th>
+                            <th scope="col" style="width:20%;text-align: center;"><div class="slds-truncate">Supplier</div></th>
+                            <!-- <th scope="col"><div class="slds-truncate">Stocking Location</div></th> -->
+                            <th scope="col" style="width:2%;text-align: center;" ><div class="slds-truncate">Ordered Qty</div></th>
+                            <th scope="col" style="width:2%;text-align: center;"><div class="slds-truncate">Remaining Qty</div></th>
+                            <th scope="col" style="width:2%;text-align: center;"><div class="slds-truncate">Available Qty</div></th>
+                            <th scope="col" style="width:20%;text-align: center;"><div class="slds-truncate">Reserved Qty</div></th>
+                            <template if:true={showTypeHeading}>
+                                <th scope="col" style="text-align: center;"><div class="slds-truncate">Select PO Type</div></th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={orderProducts} for:item="row">
+                            <tr key={row.Id}>
+                                <td style="text-align: center;"><lightning-input type="checkbox"  onchange={handleActionChange} checked={row.isSelected} data-id={row.Id}></lightning-input></td>
+                                <td  class="slds-cell-wrap">{row.productName}</td>
+                                <td  class="slds-cell-wrap">{row.supplierName}</td>
+                                <!-- <td>{row.stockingLocationName}</td> -->
+                                <td style="text-align: center;">{row.quantityOrdered}</td>
+                                <td style="text-align: center;">{row.quantityRemaining}</td>
+                                <td style="text-align: center;">{row.inventoryAvailableQuantity}</td>
+                                <td  style="width:17%">
+                                    <template if:false={row.showSerialBtn}>                     
+                                        <lightning-input type="number"
+                                        value={row.newReservedQuantity} 
+                                        onchange={handleQtyChange} 
+                                        data-name="width"
+                                        variant="label-hidden"
+                                        min={row.minimumReservedQty}
+                                        max={row.quantityRemaining}
+                                        data-id={row.Id}
+                                        class="validate"
+                                        disabled={row.disableInput}
+                                        ></lightning-input>
+                                    </template>
+    
+                                    <template if:true={row.showSerialBtn}>                        
+                                        <lightning-input type="number"
+                                        value={row.newReservedQuantity} 
+                                        onchange={handleQtyChange} 
+                                        data-name="width"
+                                        variant="label-hidden"
+                                        min={row.minimumReservedQty}
+                                        max={row.quantityRemaining}
+                                        data-id={row.Id}
+                                        class="validate btn-width"
+                                        disabled={row.disableInput}
+                                        ></lightning-input>
+                                    </template>
+    
+                                    <template if:true={row.showSerialBtn}>
+                                        <span class="tooltip">
+                                        <lightning-button style="margin-left: 5px;" class="rounded-btn" data-id={row.Id} label=" #" onclick={handleAddSerialClick}></lightning-button>
+                                        <span class="tooltiptext">Add Serial</span>
+                                    </span>
+                                    </template>
+                                </td>
+                                <template if:true={row.showTypeCombobox}>
+                                    <td style="text-align: center;">
+                                        <!-- <lightning-input type="checkbox" checked={row.createPO} data-id={row.Id} disabled></lightning-input> -->
+                                        
+                                            <lightning-combobox 
+                                                variant="label-hidden"
+                                                data-id={row.Id}
+                                                value={selectedRecordType}
+                                                placeholder="Select type"
+                                                options={recordTypeOptions}
+                                                onchange={handleRecordTypeChange}>
+                                            </lightning-combobox>
+                                        
+                                    </td>
+                                </template>
+                                <template if:false={row.showTypeCombobox}>
+                                    <td style="text-align: center;">
+                                        
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+        
+
+        <div style="text-align: center; margin-bottom: .5em;margin-top:10px;" class="slds-col slds-size_12-of-12" slot="footer">
+            <template if:true={orderProducts.length}>
+                <lightning-button label="Reserve" onclick={handleReserve} variant="brand" class="reserve-btn"></lightning-button>
+            </template>
+            <lightning-button label="Cancel" onclick={handleCancel} variant="neutral" class="neutral-btn"></lightning-button>
+        </div>
+    </div>
+
+    <template if:true={showSerialModal}>
+        <c-add-serial-modal
+            onclose={handleCloseModal}
+            onsaveserials={handleSaveSerials}
+            serial-record={serialRecord}>
+        </c-add-serial-modal>
+    </template>
+</template>

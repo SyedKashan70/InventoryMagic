@@ -1,0 +1,14 @@
+<template>
+    <div class="record-row" onclick={handleClick}>
+        <div class="icon-container" style={iconStyle}>
+            <lightning-icon icon-name={iconName} alternative-text={label} size="small"></lightning-icon>
+        </div>
+        <div class="label-container">
+            <div class="label">{label}</div>
+        </div>
+        <div class="count-container">
+            <div class="count">{formattedCount}</div>
+            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Go"></lightning-icon>
+        </div>
+    </div>
+</template>

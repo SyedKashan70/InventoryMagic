@@ -1,0 +1,121 @@
+<template>
+    <div class="slds-form-element">
+       <!--Show the lookup label with respect to the condition if the lookup label is empty this template will not show-->
+       <template if:true={lookupLabel}>
+          <label  class="slds-form-element__label" for="combobox-id-2">{lookupLabel}</label>   
+       </template>
+       
+       <!--Show the lookup Help text with respect to the condition if the lookup Help text is empty this template will not show-->
+       <template if:true={helpText}>
+             <lightning-helptext content={helpText}></lightning-helptext>
+       </template>
+       <div class="slds-form-element__control">
+          <div class="slds-combobox_container">
+             <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                <!--show input conditionally if value is selected it will display-->
+                <template if:true={selectedValue}>
+                   <div data-key="pilldiv" class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                         <span class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon" title="object">
+                            <div class="slds-icon slds-icon_small" aria-hidden="true">
+                               <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+                            </div>
+                            <span class="slds-assistive-text">Record</span>
+                         </span>
+                         <input type="text"      
+                           disabled={isDisable} 
+                           class="slds-input slds-combobox__input slds-combobox__input-value" 
+                           id="combobox-id-5" aria-controls="listbox-id-5" role="textbox" placeholder="Select an Option" readonly   value={selectedValue} />
+ 
+                         <!-- close icon to remove selected record -->
+                         <template if:false={blockChangeRecord}>
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick={removeRecordOnLookup} title="Remove selected option">
+                               <span class="slds-button__icon" aria-hidden="true">
+                                  <!--Show icon of remove selected value -->          
+                                  <lightning-icon icon-name="utility:close" size="xx-Small" class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" onclick={removeRecordOnLookup} aria-hidden="true">
+                                  </lightning-icon>
+                               </span>
+                               <span class="slds-assistive-text">Remove selected record</span>
+                            </button>
+                         </template>
+                   </div>
+                   <template if:true={editableAllowed}>
+                      <p onclick={editRecordClickHandler} style="color: blue; text-decoration: underline;">{editLinkLabel}</p>
+                   </template>
+                   
+                </template>
+                <!--show search input if value is not selected-->
+                <template if:false={selectedValue}>
+                   <div data-key="searchdiv" class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                      <input type="text" 
+                        disabled={isDisable}
+                      onfocusout={onLeave} 
+                      value="" 
+                      onkeyup={handleKeyChange} 
+                      onfocus={handleonfocus} class="slds-input slds-combobox__input searchlookupInput" id="combobox-id-2" 
+                      aria-autocomplete="list" aria-controls="listbox-id-2" role="textbox" placeholder={lookupPlaceholder}/>
+                      <template if:true={showSearchIcon}>
+ 
+                         
+                         <lightning-button-icon variant="container" class="search-icon-modal"  icon-name="utility:search"
+                               alternative-text="Search" title="Search" onclick={SearchIconClickHandler}>
+                         </lightning-button-icon>
+                      </template>
+                   </div>
+                   <template if:true={showOptions}>
+                      <template if:true={recordsList}>
+                         <div id="listbox-id-2-venu" data-key="dropdownresult" class="slds-show slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                               <!--Show message if record list is empty-->
+                               <template if:true={message}>
+                                  <center> {message}</center>
+                               </template>
+ 
+                               <!--Allow add new record-->
+                               <template if:true={isCreatable}>
+                                     <li role="presentation" class="slds-listbox__item" 
+                                        data-record-id="create-new" onclick={AddNewClickHandler}>
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                           <span class="slds-media__figure slds-listbox__option-icon">
+                                              <span class="slds-icon_container">
+                                                    <lightning-icon icon-name="utility:add" size="small"
+                                                       alternative-text="add new records">
+                                                    </lightning-icon>
+                                              </span>
+                                           </span>
+                                           <span class="slds-media__body">
+                                              <span class="slds-listbox__option-text slds-listbox__option-text_entity recordName">
+                                                 New {objectLabel} 
+                                              </span>
+                                           </span>
+                                        </div>
+                                     </li>
+                                  </template>
+ 
+                               <!--Create list of record if record list is not empty-->
+                               <template for:each={recordsList} for:item="record">
+                                  <li data-id={record.RowIndex} data-name={record.Name} data-key={record.Id} id={record.Id} key={record.Id} onclick={recordSelection} role="presentation" class="slds-listbox__item">
+                                     <div data-key={record.Id} data-name={record.Name} data-id={record.RowIndex} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                           <span data-key={record.Id} data-name={record.Name} data-id={record.RowIndex}
+                                                 class="slds-icon_container">
+                                              <lightning-icon   data-key={record.Id} data-name={record.Name} data-id={record.RowIndex} icon-name={iconName} size="small"></lightning-icon>
+                                           </span>
+                                        </span>
+                                        <span class="slds-media__body">
+                                        <span data-key={record.Id} data-name={record.Name} data-id={record.RowIndex}
+                                           class="slds-listbox__option-text slds-listbox__option-text_entity recordName">{record.Name} </span>
+                                        </span>
+                                     </div>
+                                  </li>
+                               </template>
+                            </ul>
+                         </div>
+                      </template>
+                   </template>
+                   
+                </template>
+             </div>
+          </div>
+       </div>
+    </div>
+ </template>

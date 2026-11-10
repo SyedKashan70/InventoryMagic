@@ -1,0 +1,51 @@
+<template>
+    <div class="slds-form-element">
+        <template if:true={lookupLabel}>
+            <label class="slds-form-element__label">{lookupLabel}</label>
+        </template>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-is-open" role="combobox">
+                    <template if:true={selectedValue}>
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right">
+                            <lightning-icon icon-name={iconName} size="small" class="slds-input__icon slds-input__icon_left"></lightning-icon>
+                            <input class="slds-input slds-combobox__input slds-combobox__input-value"
+                                   value={selectedValue} readonly placeholder="Select an option"/>
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                    onclick={removeRecordOnLookup}>
+                                <lightning-icon icon-name="utility:close" size="xx-small"></lightning-icon>
+                            </button>
+                        </div>
+                    </template>
+                    <template if:false={selectedValue}>
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                            <input type="text" onkeyup={handleKeyChange} onfocus={handleonfocus} onblur={onLeave}
+                                   class="slds-input slds-combobox__input" placeholder={lookupPlaceholder}/>
+                                  
+                        </div>
+                        <template if:true={showOptions}>
+                            <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                <ul class="slds-listbox slds-listbox_vertical" role="listbox">
+                                    <template if:true={message}>
+                                        <li class="slds-listbox__item">
+                                            <span class="slds-listbox__option-text">{message}</span>
+                                        </li>
+                                    </template>
+                                    <template for:each={recordsList} for:item="record">
+                                        <li key={record.Id} class="slds-listbox__item" data-index={record.RowIndex}
+                                            onclick={recordSelection}>
+                                            <div class="slds-media slds-listbox__option slds-listbox__option_entity">
+                                                <lightning-icon icon-name={iconName} size="x-small" class="slds-m-right_small"></lightning-icon>
+                                                <span class="slds-listbox__option-text">{record.Name}</span>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

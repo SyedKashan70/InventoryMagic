@@ -1,0 +1,53 @@
+<template>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Inventory Magic</div>
+            <ul class="nav-menu">
+                <li onclick={handleMenuClick} data-key="home">Home</li>
+                <li onclick={handleMenuClick} data-key="orderReserved">Order Reserved</li>
+                <li onclick={handleMenuClick} data-key="orderUnreserved">Order Unreserved</li>
+                <li onclick={handleMenuClick} data-key="receivePo">Receive PO</li>
+                <li onclick={handleMenuClick} data-key="magicTransfer">Magic Transfer</li>
+                <li onclick={handleMenuClick} data-key="createInvoice">Create Invoice</li>
+                <li onclick={handleMenuClick} data-key="stockTransfer">Stock Transfer</li>
+                <li onclick={handleMenuClick} data-key="stockAdjustment">Stock Adjustment</li>
+            </ul>            
+        </div>
+        <div class="main-panel">
+            <div class="header">Dashboard Control Panel</div>
+        
+            <template if:true={isHome}>
+                <div class="summary-cards">
+                    <div class="card blue">150<br/>New Orders</div>
+                    <div class="card green">53%<br/>Completed</div>
+                    <div class="card orange">44<br/>Invoices Created</div>
+                    <div class="card red">65<br/>Transfers</div>
+                </div>
+            </template>
+        
+            <template if:true={isOrderReserved}>
+                <c-order-product-reserved></c-order-product-reserved>
+            </template>
+            <template if:true={isOrderUnreserved}>
+                <c-order-product-un-reserved></c-order-product-un-reserved>
+            </template>
+            <template if:true={isReceivePo}>
+                <c-receive-purchase-order-line></c-receive-purchase-order-line>
+            </template>
+            <template if:true={isMagicTransfer}>
+                <c-magic-transfer></c-magic-transfer>
+            </template>
+            <template if:true={isCreateInvoice}>
+                <p>Create Invoice</p>
+            </template>
+            <template if:true={isStockTransfer}>
+                <c-stock-transfer></c-stock-transfer>
+            </template>
+            <template if:true={isStockAdjustment}>
+                <c-stock-adjustment></c-stock-adjustment>
+            </template>
+        </div>
+        
+    </div>
+</template>
