@@ -1,6 +1,6 @@
 # Inventory Magic
 
-Inventory Magic is a Salesforce application for running warehouse inventory. It covers reserving stock against orders, receiving purchase orders, moving stock between locations, adjusting counts and tracking serial numbers. It also has an **offline mode**, so field sales reps can keep creating orders and quotes and reserving stock without an internet connection. Their work syncs back to Salesforce automatically when they reconnect.
+Inventory Magic is a Salesforce application for running warehouse inventory. It covers reserving stock against orders, receiving purchase orders, moving stock between locations, adjusting counts and tracking serial numbers. It also has an **offline mode**, so field sales reps can keep creating orders and quotes and reserving stock without an internet connection. This works on desktop and in the **Salesforce mobile app**. Work done offline is saved on the device and syncs back to Salesforce automatically when the connection returns.
 
 It is built with Lightning Web Components (LWC), Aura and Apex as a Salesforce DX project.
 
@@ -26,9 +26,9 @@ It is built with Lightning Web Components (LWC), Aura and Apex as a Salesforce D
 
 ### Offline mode
 
-The `offlineCmp` component lets a user keep working when the device has no connection:
+The `offlineCmp` component lets a user keep working when the device has no connection, both in a desktop browser and in the **Salesforce mobile app** (iOS and Android):
 
-- **Local cache.** While online, the component downloads customer accounts, active products, warehouses, stocking locations, inventory, serial numbers and order items awaiting reservation, and stores them in the browser's `localStorage`.
+- **Local cache.** While online, the component downloads customer accounts, active products, warehouses, stocking locations, inventory, serial numbers and order items awaiting reservation, and stores them in `localStorage`. That is the browser's storage on desktop and the device's own storage in the mobile app, so a rep can go out in the field with the data already on the phone.
 - **Work offline.** Users can do the following against the cached data:
   - create **orders** with order products (`createOrderOffline`)
   - create **quotes** with quote lines (`quoteCmpOffline`)
@@ -107,6 +107,8 @@ sf apex run test --target-org inventory-magic --test-level RunLocalTests --wait 
 
 After you deploy, add **`dashboardApp`** or **`offlineCmp`** to a Lightning App page, Home page or tab with Lightning App Builder. `orderProductReserved` and `orderProductUnReserved` are built as quick actions on the Order record page.
 
+To use offline mode on mobile, add the Lightning page or tab that contains `offlineCmp` to the Salesforce mobile app navigation (**Setup → Mobile Apps → Salesforce Navigation**). Then open it once while online so the data is cached on the device.
+
 ---
 
 ## Development
@@ -131,7 +133,7 @@ Each Apex class comes with a matching `*Test.cls`, and test data is built by `D_
 - **Apex**: controllers, trigger handlers, a Batch Apex job
 - **Lightning Web Components** and **Aura**
 - **Visualforce**: Lightning Out host pages
-- **Browser `localStorage`** for offline caching
+- **`localStorage`** for offline caching on desktop and in the Salesforce mobile app
 
 ---
 
